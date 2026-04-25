@@ -1,0 +1,166 @@
+Build a full-stack, production-ready cryptocurrency exchange platform similar to Coinbase and Binance with a strong focus on performance, security, scalability, and a modern UI/UX.
+
+Tech Stack:
+- Frontend: Next.js (latest, App Router, TypeScript, Tailwind CSS, ShadCN UI)
+- Backend: Node.js with Express (TypeScript)
+- Database: PostgreSQL (use Prisma ORM)
+- Realtime: WebSockets (for live price updates and trades)
+- Caching: Redis
+- Storage: AWS S3 (for documents, KYC uploads)
+- Authentication: JWT + Refresh Tokens + 2FA (Google Authenticator)
+- Payments: Stripe + Crypto wallets integration
+- Blockchain Integration: Use APIs (like Binance, Coinbase, or Web3 providers)
+
+---
+
+### 🌐 CORE FEATURES
+
+#### 1. User System
+- User registration/login (email, Google OAuth optional)
+- KYC verification (upload ID, selfie)
+- 2FA security (mandatory for withdrawals)
+- Account dashboard
+- Wallet overview (multi-coin support: BTC, ETH, USDT, etc.)
+- Transaction history
+
+---
+
+#### 2. Wallet System
+- Generate deposit addresses per user
+- Track deposits (via blockchain APIs)
+- Withdrawals (with admin approval system)
+- Internal transfers between users
+- Cold + hot wallet simulation logic
+
+---
+
+#### 3. Trading Engine (Core Feature)
+- Spot trading (buy/sell crypto)
+- Order types:
+  - Market
+  - Limit
+- Order book (real-time updates)
+- Trade matching engine (basic but functional)
+- Price charts (use TradingView widget)
+
+---
+
+#### 4. Crypto Market Data
+- Live crypto prices (WebSocket/API)
+- Market pairs (BTC/USDT, ETH/USDT, etc.)
+- 24h stats (volume, change %)
+- Trending coins section
+
+---
+
+#### 5. Homepage (VERY IMPORTANT)
+Modern, clean, high-converting landing page with:
+- Hero section with CTA ("Buy Crypto Instantly")
+- Live crypto price ticker
+- Trust indicators
+
+🔥 PROMINENT SECTION:
+"Lost Crypto to a Scam?"
+- Advertise a **Crypto Recovery Service**
+- CTA button: "Recover My Funds"
+- Lead capture form (name, email, wallet, description)
+- Store submissions in database for admin review
+
+---
+
+#### 6. Admin Panel (VERY POWERFUL)
+Build a full-featured admin dashboard with:
+
+👤 User Management:
+- View all users
+- Approve/reject KYC
+- Freeze/suspend accounts
+- View balances
+
+💰 Transactions:
+- View all deposits/withdrawals
+- Approve/reject withdrawals
+- Flag suspicious activity
+
+📈 Trading Control:
+- Monitor trades
+- Disable trading pairs
+- Adjust fees
+
+💵 Revenue & Fees:
+- Set trading fees
+- Track platform earnings
+
+📊 Analytics Dashboard:
+- Total users
+- Daily volume
+- Revenue charts
+
+📨 Recovery Leads (IMPORTANT):
+- View all crypto recovery requests
+- Contact users
+- Mark status (new, in progress, resolved)
+
+⚙️ System Controls:
+- Manage supported coins
+- Manage wallet addresses
+- API key management
+
+---
+
+#### 7. Security (CRITICAL)
+- Rate limiting
+- Input validation (Zod)
+- Encryption for sensitive data
+- Secure password hashing (bcrypt)
+- Anti-fraud detection basics
+- Audit logs for admin actions
+
+---
+
+#### 8. Performance Optimization
+- Server-side rendering (Next.js)
+- API caching (Redis)
+- Lazy loading components
+- Optimized DB queries
+- WebSocket efficiency
+
+---
+
+#### 9. UI/UX Design Requirements
+- Dark mode default (Binance-style)
+- Glassmorphism + modern fintech look
+- Smooth animations (Framer Motion)
+- Mobile responsive
+- Clean dashboard layout
+
+---
+
+#### 10. Folder Structure
+- Monorepo setup (frontend + backend)
+- Clear separation of concerns
+- Scalable architecture
+
+---
+
+### 🎯 EXTRA (ADVANCED FEATURES)
+- Referral system
+- Notifications (email + in-app)
+- API for external trading bots
+- Multi-language support
+- Role-based admin permissions
+
+---
+
+### 🚀 OUTPUT REQUIREMENTS
+- Generate FULL project code (frontend + backend)
+- Include environment setup instructions
+- Include database schema (Prisma)
+- Include API routes
+- Include example seed data
+- Ensure the app can run locally with `npm install && npm run dev`
+
+---
+
+Focus on building a REALISTIC, scalable crypto exchange — not a demo.
+Prioritize clean code, modular architecture, and production readiness.

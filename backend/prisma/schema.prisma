@@ -1,0 +1,185 @@
+// Prisma schema for CRYPTEX (SQLite for dev, swap provider for postgres in prod)
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// NOTE: SQLite doesn't support enums; these are plain strings validated in code.
+// Role:           USER | ADMIN
+// KycStatus:      NONE | PENDING | APPROVED | REJECTED
+// AccountStatus:  ACTIVE | FROZEN | SUSPENDED
+// TxType:         DEPOSIT | WITHDRAWAL | TRADE | TRANSFER | FEE
+// TxStatus:       PENDING | APPROVED | COMPLETED | REJECTED | FAILED
+// OrderSide:      BUY | SELL
+// OrderType:      MARKET | LIMIT
+// OrderStatus:    OPEN | PARTIAL | FILLED | CANCELLED
+// LeadStatus:     NEW | IN_PROGRESS | RESOLVED | CLOSED
+
+model User {
+  id               String   @id @default(cuid())
+  email            String   @unique
+  passwordHash     String
+  fullName         String?
+  role             String   @default("USER")
+  status           String   @default("ACTIVE")
+  kycStatus        String   @default("NONE")
+  twoFactorEnabled Boolean  @default(false)
+  twoFactorSecret  String?
+  referralCode      String   @unique @default(cuid())
+  referredById      String?
+  referredBy        User?    @relation("Referrals", fields: [referredById], references: [id])
+  referrals         User[]   @relation("Referrals")
+  verificationDeposit Decimal @default(0)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  wallets       Wallet[]
+  transactions  Transaction[]
+  orders        Order[]
+  trades        Trade[]
+  kycDocuments  KycDocument[]
+  notifications Notification[]
+  auditLogs     AuditLog[]
+}
+
+model Coin {
+  id         String        @id @default(cuid())
+  symbol     String        @unique
+  name       String
+  iconUrl    String?
+  enabled    Boolean       @default(true)
+  decimals   Int           @default(8)
+  wallets    Wallet[]
+  pairsBase  TradingPair[] @relation("BaseCoin")
+  pairsQuote TradingPair[] @relation("QuoteCoin")
+  createdAt  DateTime      @default(now())
+}
+
+model Wallet {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  coinId    String
+  coin      Coin     @relation(fields: [coinId], references: [id])
+  address   String   @unique
+  balance   Decimal  @default(0)
+  locked    Decimal  @default(0)
+  createdAt DateTime @default(now())
+  @@unique([userId, coinId])
+}
+
+model TradingPair {
+  id          String   @id @default(cuid())
+  symbol      String   @unique
+  baseCoinId  String
+  quoteCoinId String
+  baseCoin    Coin     @relation("BaseCoin", fields: [baseCoinId], references: [id])
+  quoteCoin   Coin     @relation("QuoteCoin", fields: [quoteCoinId], references: [id])
+  enabled     Boolean  @default(true)
+  feeBps      Int      @default(10)
+  orders      Order[]
+  trades      Trade[]
+}
+
+model Order {
+  id        String      @id @default(cuid())
+  userId    String
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pairId    String
+  pair      TradingPair @relation(fields: [pairId], references: [id])
+  side      String
+  type      String
+  price     Decimal?
+  amount    Decimal
+  filled    Decimal     @default(0)
+  status    String      @default("OPEN")
+  createdAt DateTime    @default(now())
+  trades    Trade[]
+}
+
+model Trade {
+  id        String      @id @default(cuid())
+  pairId    String
+  pair      TradingPair @relation(fields: [pairId], references: [id])
+  orderId   String
+  order     Order       @relation(fields: [orderId], references: [id])
+  userId    String
+  user      User        @relation(fields: [userId], references: [id])
+  price     Decimal
+  amount    Decimal
+  fee       Decimal     @default(0)
+  side      String
+  createdAt DateTime    @default(now())
+}
+
+model Transaction {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String
+  status    String   @default("PENDING")
+  coin      String
+  amount    Decimal
+  address   String?
+  txHash    String?
+  note      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model KycDocument {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  idDocUrl   String
+  selfieUrl  String
+  status     String   @default("PENDING")
+  reviewedBy String?
+  reviewNote String?
+  createdAt  DateTime @default(now())
+}
+
+model RecoveryLead {
+  id           String   @id @default(cuid())
+  fullName     String
+  email        String
+  walletAddr   String?
+  amountLost   String?
+  description  String
+  status       String   @default("NEW")
+  assignedTo   String?
+  internalNote String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  body      String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  action    String
+  target    String?
+  meta      String?
+  ip        String?
+  createdAt DateTime @default(now())
+}
+
+model Setting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}
