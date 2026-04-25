@@ -1,7 +1,12 @@
+import 'dotenv/config';
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
+
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@cryptex.io';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Admin@12345';
+const ADMIN_FULL_NAME = process.env.ADMIN_FULL_NAME || 'Cryptex Admin';
 
 const COINS = [
   { symbol: 'BTC', name: 'Bitcoin', iconUrl: 'https://assets.coingecko.com/coins/images/1/small/bitcoin.png' },
@@ -35,14 +40,14 @@ async function main() {
   }
 
   // Admin
-  const adminPass = await bcrypt.hash('Admin@12345', 10);
+  const adminPass = await bcrypt.hash(ADMIN_PASSWORD, 10);
   await prisma.user.upsert({
-    where: { email: 'admin@cryptex.io' },
+    where: { email: ADMIN_EMAIL },
     update: {},
     create: {
-      email: 'admin@cryptex.io',
+      email: ADMIN_EMAIL,
       passwordHash: adminPass,
-      fullName: 'Cryptex Admin',
+      fullName: ADMIN_FULL_NAME,
       role: 'ADMIN'
     }
   });
@@ -77,7 +82,7 @@ async function main() {
     create: { key: 'tradingFeeBps', value: '10' }
   });
 
-  console.log('Seed complete: admin@cryptex.io / Admin@12345  ·  demo@cryptex.io / Demo@12345');
+  console.log(`Seed complete: ${ADMIN_EMAIL} / ${ADMIN_PASSWORD}  ·  demo@cryptex.io / Demo@12345`);
 }
 
 main().catch((e) => { console.error(e); process.exit(1); }).finally(() => prisma.$disconnect());

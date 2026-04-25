@@ -40,7 +40,7 @@ You will use this as DATABASE_URL in backend env vars.
    - Root Directory: leave blank (use repo root)
    - Runtime: Node
    - Build Command:
-     npm install && npm run build --workspace backend
+     npm install && npm run db:deploy --workspace backend && npm run build --workspace backend
    - Start Command:
      npm run start --workspace backend
 
@@ -52,6 +52,9 @@ You will use this as DATABASE_URL in backend env vars.
    REFRESH_SECRET=<another_long_random_string>
    JWT_EXPIRES_IN=15m
    REFRESH_EXPIRES_IN=30d
+   ADMIN_EMAIL=admin@cryptex.io
+   ADMIN_PASSWORD=<your_admin_password>
+   ADMIN_FULL_NAME=Cryptex Admin
    CORS_ORIGIN=https://<your-frontend-domain>.vercel.app
    COINGECKO_BASE=https://api.coingecko.com/api/v3
 
@@ -59,9 +62,18 @@ You will use this as DATABASE_URL in backend env vars.
    REDIS_URL=
 
 5. Deploy the service.
-6. After first deploy, open the Render backend "Shell" and run:
-   npx prisma migrate deploy
-   npm run db:seed --workspace backend
+6. Seed data (admin/demo users) WITHOUT Render Shell:
+   Option A (quick, one-time in Build Command):
+   - Temporarily set Build Command to:
+     npm install && npm run db:deploy --workspace backend && npm run db:seed --workspace backend && npm run build --workspace backend
+   - Deploy once
+   - Then change Build Command back to:
+     npm install && npm run db:deploy --workspace backend && npm run build --workspace backend
+
+   Option B (seed from your local computer):
+   - In your local terminal, set DATABASE_URL to your Render Postgres External URL
+   - Run:
+     npm run db:seed --workspace backend
 
 7. Test backend health:
    https://<your-render-backend>.onrender.com/health
@@ -109,8 +121,9 @@ If CORS_ORIGIN is wrong, login/register requests will fail.
 
 - Database errors?
   - Make sure DATABASE_URL is from Render PostgreSQL "External Database URL".
-  - Run in Render shell:
-    npx prisma migrate deploy
+  - This guide already runs migrations in Build Command with:
+    npm run db:deploy --workspace backend
+  - If still failing, check Render logs for Prisma connection errors.
 
 - Frontend can't call backend?
   - Check NEXT_PUBLIC_API_URL in Vercel
