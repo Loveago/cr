@@ -1,0 +1,140 @@
+CRYPTEX DEPLOY GUIDE (NOOB-FRIENDLY)
+Frontend: Vercel
+Backend: Render
+Database: PostgreSQL (Render)
+
+==================================================
+0) BEFORE YOU START
+==================================================
+You need:
+1. A GitHub account
+2. A Render account (https://render.com)
+3. A Vercel account (https://vercel.com)
+4. Your project pushed to GitHub
+
+If your code is not on GitHub yet:
+- Create a new GitHub repo
+- Push this project
+
+
+==================================================
+1) DEPLOY POSTGRESQL ON RENDER
+==================================================
+1. Login to Render
+2. Click "New" -> "PostgreSQL"
+3. Name: cryptex-db (or anything)
+4. Plan: Free (or paid if you want stability)
+5. Create Database
+6. After it is ready, open the DB and copy:
+   - "External Database URL"
+
+You will use this as DATABASE_URL in backend env vars.
+
+
+==================================================
+2) DEPLOY BACKEND (EXPRESS) ON RENDER
+==================================================
+1. In Render, click "New" -> "Web Service"
+2. Connect your GitHub repo
+3. IMPORTANT settings:
+   - Root Directory: leave blank (use repo root)
+   - Runtime: Node
+   - Build Command:
+     npm install && npm run build --workspace backend
+   - Start Command:
+     npm run start --workspace backend
+
+4. Add Environment Variables in Render service settings:
+   NODE_ENV=production
+   PORT=10000
+   DATABASE_URL=<PASTE_EXTERNAL_DATABASE_URL_FROM_RENDER_POSTGRES>
+   JWT_SECRET=<long_random_string>
+   REFRESH_SECRET=<another_long_random_string>
+   JWT_EXPIRES_IN=15m
+   REFRESH_EXPIRES_IN=30d
+   CORS_ORIGIN=https://<your-frontend-domain>.vercel.app
+   COINGECKO_BASE=https://api.coingecko.com/api/v3
+
+   Optional:
+   REDIS_URL=
+
+5. Deploy the service.
+6. After first deploy, open the Render backend "Shell" and run:
+   npx prisma migrate deploy
+   npm run db:seed --workspace backend
+
+7. Test backend health:
+   https://<your-render-backend>.onrender.com/health
+   You should see JSON like: {"ok":true,...}
+
+
+==================================================
+3) DEPLOY FRONTEND (NEXT.JS) ON VERCEL
+==================================================
+1. Login to Vercel
+2. Click "Add New" -> "Project"
+3. Import the same GitHub repo
+4. Set these project settings:
+   - Framework Preset: Next.js
+   - Root Directory: frontend
+   - Build Command: (leave default)
+   - Output Directory: (leave default)
+
+5. Add Environment Variables in Vercel:
+   NEXT_PUBLIC_API_URL=https://<your-render-backend>.onrender.com
+   NEXT_PUBLIC_WS_URL=wss://<your-render-backend>.onrender.com/ws
+   NEXT_PUBLIC_APP_URL=https://<your-vercel-project>.vercel.app
+
+6. Click Deploy.
+
+
+==================================================
+4) CONNECT FRONTEND + BACKEND (VERY IMPORTANT)
+==================================================
+After Vercel gives your frontend URL:
+1. Go back to Render backend env vars
+2. Update CORS_ORIGIN to exactly your Vercel URL, for example:
+   CORS_ORIGIN=https://cryptex-app.vercel.app
+3. Redeploy backend on Render
+
+If CORS_ORIGIN is wrong, login/register requests will fail.
+
+
+==================================================
+5) QUICK CHECKLIST IF SOMETHING BREAKS
+==================================================
+- Backend not starting?
+  - Confirm Build Command and Start Command exactly match this file.
+  - Check Render logs for missing env vars.
+
+- Database errors?
+  - Make sure DATABASE_URL is from Render PostgreSQL "External Database URL".
+  - Run in Render shell:
+    npx prisma migrate deploy
+
+- Frontend can't call backend?
+  - Check NEXT_PUBLIC_API_URL in Vercel
+  - Check CORS_ORIGIN in Render backend
+  - Both must point to real deployed domains (https)
+
+- WebSocket not working?
+  - Ensure NEXT_PUBLIC_WS_URL uses wss:// and ends with /ws
+
+
+==================================================
+6) SAFE DEFAULT VALUES YOU CAN COPY
+==================================================
+Backend (Render):
+NODE_ENV=production
+PORT=10000
+JWT_EXPIRES_IN=15m
+REFRESH_EXPIRES_IN=30d
+COINGECKO_BASE=https://api.coingecko.com/api/v3
+
+Frontend (Vercel):
+NEXT_PUBLIC_API_URL=https://your-backend.onrender.com
+NEXT_PUBLIC_WS_URL=wss://your-backend.onrender.com/ws
+NEXT_PUBLIC_APP_URL=https://your-frontend.vercel.app
+
+
+Done. Backend on Render + Frontend on Vercel should now work together.

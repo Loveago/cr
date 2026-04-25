@@ -1,14 +1,14 @@
-// Prisma schema for CRYPTEX (SQLite for dev, swap provider for postgres in prod)
+// Prisma schema for CRYPTEX (PostgreSQL)
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-// NOTE: SQLite doesn't support enums; these are plain strings validated in code.
+// NOTE: Status/role enums are modeled as plain strings and validated in code.
 // Role:           USER | ADMIN
 // KycStatus:      NONE | PENDING | APPROVED | REJECTED
 // AccountStatus:  ACTIVE | FROZEN | SUSPENDED
