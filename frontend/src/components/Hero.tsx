@@ -9,9 +9,9 @@ export function Hero() {
   return (
     <section className="relative overflow-hidden rounded-2xl border border-bg-border bg-gradient-to-br from-bg-soft via-bg to-bg-soft p-6 sm:p-10">
       {/* glow */}
-      <div className="pointer-events-none absolute -right-20 top-10 h-72 w-72 rounded-full bg-brand-orange glow-blob" />
-      <div className="pointer-events-none absolute right-40 -top-10 h-72 w-72 rounded-full bg-brand-yellow glow-blob" />
-      <div className="pointer-events-none absolute right-10 bottom-0 h-72 w-72 rounded-full bg-brand-pink glow-blob opacity-40" />
+      <div className="pointer-events-none absolute -right-24 top-6 h-56 w-56 rounded-full bg-brand-orange glow-blob opacity-35" />
+      <div className="pointer-events-none absolute right-40 -top-12 h-56 w-56 rounded-full bg-brand-yellow glow-blob opacity-35" />
+      <div className="pointer-events-none absolute right-8 bottom-0 h-56 w-56 rounded-full bg-brand-pink glow-blob opacity-25" />
 
       <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr]">
         <div className="relative z-10">
@@ -77,11 +77,30 @@ export function Hero() {
         </div>
 
         {/* Coin visual */}
-        <div className="relative h-72 overflow-hidden lg:h-auto">
-          <FloatingCoin emoji="₿" gradient="from-brand-yellow to-brand-orange" className="absolute right-12 top-12 h-44 w-44" />
-          <FloatingCoin emoji="Ξ" gradient="from-indigo-400 to-purple-500" className="absolute right-48 top-2 h-24 w-24" delay={0.2} />
-          <FloatingCoin emoji="₮" gradient="from-emerald-400 to-teal-500" className="absolute right-2 top-2 h-20 w-20" delay={0.4} />
-          <FloatingCoin emoji="◎" gradient="from-pink-500 to-fuchsia-600" className="absolute right-40 bottom-10 h-16 w-16" delay={0.6} />
+        <div className="relative z-10 h-72 overflow-hidden lg:h-auto">
+          <FloatingCoin
+            imageUrl="https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/btc.png"
+            alt="Bitcoin"
+            className="absolute right-12 top-12 h-44 w-44"
+          />
+          <FloatingCoin
+            imageUrl="https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/eth.png"
+            alt="Ethereum"
+            className="absolute right-48 top-2 h-24 w-24"
+            delay={0.2}
+          />
+          <FloatingCoin
+            imageUrl="https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/usdt.png"
+            alt="Tether"
+            className="absolute right-2 top-2 h-20 w-20"
+            delay={0.4}
+          />
+          <FloatingCoin
+            imageUrl="https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/sol.png"
+            alt="Solana"
+            className="absolute right-40 bottom-10 h-16 w-16"
+            delay={0.6}
+          />
           {/* ring */}
           <div className="absolute inset-x-12 bottom-4 h-8 rounded-[100%] bg-gradient-to-r from-brand-orange/40 via-brand-yellow/30 to-transparent blur-md" />
         </div>
@@ -97,16 +116,22 @@ export function Hero() {
 }
 
 function FloatingCoin({
-  emoji, gradient, className, delay = 0
-}: { emoji: string; gradient: string; className: string; delay?: number }) {
+  imageUrl, alt, className, delay = 0
+}: { imageUrl: string; alt: string; className: string; delay?: number }) {
   return (
     <motion.div
       initial={{ y: 0 }}
       animate={{ y: [-8, 8, -8] }}
       transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay }}
-      className={`flex items-center justify-center rounded-full bg-gradient-to-br ${gradient} text-black font-extrabold shadow-2xl ring-4 ring-black/30 ${className}`}
+      className={`flex items-center justify-center rounded-full bg-white/95 shadow-2xl ring-4 ring-black/30 backdrop-blur ${className}`}
     >
-      <span style={{ fontSize: '50%' }} className="text-[2.5em]">{emoji}</span>
+      <img
+        src={imageUrl}
+        alt={alt}
+        className="h-[56%] w-[56%] rounded-full object-contain"
+        loading="lazy"
+        draggable={false}
+      />
     </motion.div>
   );
 }
