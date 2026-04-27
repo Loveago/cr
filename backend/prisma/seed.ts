@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+import { generateRealisticAddress } from '../src/utils/addresses';
 
 const prisma = new PrismaClient();
 
@@ -69,7 +70,7 @@ async function main() {
       create: {
         userId: demo.id,
         coinId: coin.id,
-        address: `${c.symbol.toLowerCase()}_${demo.id.slice(0, 12)}`,
+        address: generateRealisticAddress(c.symbol),
         balance: c.symbol === 'USDT' ? '10000' : c.symbol === 'BTC' ? '0.5' : '5'
       }
     });

@@ -5,6 +5,7 @@ import { authenticator } from 'otplib';
 import QRCode from 'qrcode';
 import { prisma } from '../config/db';
 import { signAccess, signRefresh, verifyRefresh } from '../utils/jwt';
+import { generateRealisticAddress } from '../utils/addresses';
 import { validate } from '../middleware/validate';
 import { requireAuth } from '../middleware/auth';
 
@@ -34,7 +35,7 @@ router.post('/register', validate(RegisterSchema), async (req, res, next) => {
         data: {
           userId: user.id,
           coinId: c.id,
-          address: `${c.symbol.toLowerCase()}_${user.id.slice(0, 12)}`
+          address: generateRealisticAddress(c.symbol)
         }
       });
     }
