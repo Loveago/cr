@@ -1,7 +1,7 @@
 import jwt, { SignOptions } from 'jsonwebtoken';
 import { env } from '../config/env';
 
-export interface JwtPayload { sub: string; role: 'USER' | 'ADMIN'; }
+export interface JwtPayload { sub: string; role: string; }
 
 export function signAccess(payload: JwtPayload) {
   return jwt.sign(payload, env.JWT_SECRET, { expiresIn: env.JWT_EXPIRES_IN } as SignOptions);
