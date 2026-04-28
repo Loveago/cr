@@ -1,4 +1,4 @@
-fix 9import 'dotenv/config';
+import 'dotenv/config';
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import { generateRealisticAddress } from '../src/utils/addresses';
