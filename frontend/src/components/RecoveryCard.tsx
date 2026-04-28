@@ -6,9 +6,9 @@ export function RecoveryCard() {
   return (
     <aside className="relative overflow-hidden rounded-2xl border border-brand-pink/40 bg-gradient-to-br from-[#2a0e2a] to-[#1a0a25] p-6 shadow-card">
       <div className="pointer-events-none absolute -right-10 -top-10 h-44 w-44 rounded-full bg-brand-pink/30 blur-3xl" />
-      <h3 className="text-xl font-extrabold text-white">Lost Crypto to a Scam?</h3>
+      <h3 className="text-xl font-extrabold text-white">Lost Money to a Scam?</h3>
       <p className="mt-2 text-sm text-white/80">
-        We specialize in crypto recovery and blockchain investigation to help you get your funds back.
+        We specialize in recovering funds lost to crypto, wire fraud, and PayPal scams.
       </p>
       <ul className="mt-4 space-y-2 text-sm text-white/90">
         <li className="flex items-center gap-2"><BadgeCheck className="h-4 w-4 text-brand-pink" /> Scam Recovery Experts</li>

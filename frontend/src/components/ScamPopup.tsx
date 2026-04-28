@@ -36,7 +36,7 @@ export function ScamPopup() {
         </div>
 
         <p className="mt-3 text-sm leading-relaxed text-white/80">
-          Lost crypto to a scam? You are not alone. Our certified blockchain investigators have recovered millions for victims worldwide. Reach out now for immediate, confidential help.
+          Lost crypto, wire, or PayPal funds to a scam? You are not alone. Our certified investigators have recovered millions for victims worldwide. Reach out now for immediate, confidential help.
         </p>
 
         <div className="mt-5 flex flex-col gap-2">

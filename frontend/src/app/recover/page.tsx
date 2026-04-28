@@ -29,8 +29,8 @@ export default function RecoverPage() {
         <div className="grid gap-8 lg:grid-cols-2">
           <div>
             <span className="chip bg-brand-pink/15 text-brand-pink">Crypto Recovery Service</span>
-            <h1 className="mt-4 text-4xl font-extrabold text-white sm:text-5xl">Lost Crypto to a <span className="text-brand-pink">Scam?</span></h1>
-            <p className="mt-3 text-white/70">Our certified blockchain investigators help victims of fraud trace and recover stolen funds. Confidential. No upfront fees.</p>
+            <h1 className="mt-4 text-4xl font-extrabold text-white sm:text-5xl">Lost Funds to a <span className="text-brand-pink">Scam?</span></h1>
+            <p className="mt-3 text-white/70">Our certified investigators help victims of crypto fraud, wire fraud, and PayPal scams trace and recover stolen funds. Confidential. No upfront fees.</p>
             <ul className="mt-6 space-y-3 text-white/90">
               <li className="flex items-center gap-2"><BadgeCheck className="h-5 w-5 text-brand-pink" /> Certified scam recovery specialists</li>
               <li className="flex items-center gap-2"><ShieldCheck className="h-5 w-5 text-brand-pink" /> 100% privacy & encrypted communications</li>
@@ -86,7 +86,7 @@ export default function RecoverPage() {
               <div className="flex-1">
                 <h3 className="text-lg font-extrabold text-white">Need urgent help?</h3>
                 <p className="mt-1 text-sm text-white/70">
-                  If you lost crypto to a scam and need immediate assistance, reach out to us directly on Telegram.
+                  If you lost money to a crypto, wire, or PayPal scam and need immediate assistance, reach out to us directly on Telegram.
                 </p>
               </div>
               <a

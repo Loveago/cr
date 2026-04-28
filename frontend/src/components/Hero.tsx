@@ -44,7 +44,7 @@ export function Hero() {
               className="inline-flex items-center gap-2 rounded-xl border border-brand-pink/40 bg-brand-pink/10 px-4 py-2.5 text-sm font-bold text-brand-pink hover:bg-brand-pink/20 transition"
             >
               <AlertTriangle className="h-4 w-4" />
-              Lost money to a crypto scam? Recover your funds now →
+              Lost money to a scam? Recover your funds now →
             </Link>
           </div>
 
